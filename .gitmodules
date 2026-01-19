@@ -1,0 +1,8 @@
+[submodule "modules/authentification"]
+	path = modules/authentification
+	url = git@github.com:CDM-MNS/CDM-Authentification.git
+    branch = main
+[submodule "modules/user"]
+	path = modules/user
+	url = git@github.com:CDM-MNS/CDM-User.git
+    branch = main

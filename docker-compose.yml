@@ -1,0 +1,69 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: CDM_RABBIT_MQ
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - .env.docker.rabbitmq
+    networks:
+      - cdm-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-database:
+    image: postgres:15
+    container_name: cdm-user-database
+    env_file:
+      - .env.docker.user
+    ports:
+      - "5009:5432"
+    volumes:
+      - cdm-user-database:/var/lib/postgresql/data
+    networks:
+      - cdm-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build: ./modules/authentification
+    container_name: cdm-auth-service
+    env_file:
+      - .env.docker.auth
+    ports:
+      - "4001:4001"
+    depends_on:
+      user-database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cdm-network
+
+  user-service:
+    build: ./modules/user
+    container_name: cdm-user-service
+    env_file:
+      - .env.docker.user
+    ports:
+      - "4009:4009"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cdm-network
+
+volumes:
+  cdm-user-database:
+
+networks:
+  cdm-network:
+    driver: bridge
