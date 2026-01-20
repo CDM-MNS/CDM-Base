@@ -16,6 +16,7 @@ services:
       timeout: 5s
       retries: 5
 
+  # Databases
   user-database:
     image: postgres:15
     container_name: cdm-user-database
@@ -32,6 +33,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Services
+  gateway-service:
+    build: ./modules/gateway
+    container_name: cdm-gateway-service
+    env_file:
+      - .env.docker.gateway
+    ports:
+      - "4000:4000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cdm-network
 
   auth-service:
     build: ./modules/authentification
