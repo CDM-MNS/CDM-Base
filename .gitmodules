@@ -9,3 +9,6 @@
 [submodule "modules/gateway"]
 	path = modules/gateway
 	url = git@github.com:CDM-MNS/CDM-Gateway.git
+[submodule "modules/wallet"]
+	path = modules/wallet
+	url = git@github.com:CDM-MNS/CDM-Wallet.git
