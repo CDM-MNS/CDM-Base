@@ -110,7 +110,7 @@ services:
       - cdm-network
 
   cdm-wallet-service:
-    build: .
+    build: ./modules/wallet
     env_file:
       - .env.docker.wallet
     ports:
