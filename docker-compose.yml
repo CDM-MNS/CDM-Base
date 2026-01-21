@@ -37,7 +37,7 @@ services:
   cdm-wallet-db:
     image: postgres:15
     env_file:
-      - .env.docker
+      - .env.docker.wallet
     ports:
       - "5006:5432"
     volumes:
@@ -89,8 +89,6 @@ services:
     ports:
       - "4001:4001"
     depends_on:
-      user-database:
-        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     networks:
@@ -135,6 +133,15 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    networks:
+      - cdm-network
+
+  cdm-payment-service:
+    build: ./modules/payment
+    env_file:
+      - .env.docker.payment
+    ports:
+      - "4011:4011"
     networks:
       - cdm-network
 
