@@ -17,6 +17,7 @@
 [submodule "modules/bet"]
 	path = modules/bet
 	url = git@github.com:CDM-MNS/CDM-Bet.git
+    branch = main
 [submodule "modules/payment"]
 	path = modules/payment
 	url = git@github.com:CDM-MNS/CDM-Payment.git
