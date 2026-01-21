@@ -37,7 +37,7 @@ services:
   cdm-wallet-db:
     image: postgres:15
     env_file:
-      - .env.docker.wallet
+      - .env.docker
     ports:
       - "5006:5432"
     volumes:
@@ -46,6 +46,23 @@ services:
       - cdm-network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres_wallet" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  bet-database:
+    image: postgres:15
+    container_name: cdm-bet-database
+    env_file:
+      - .env.docker.bet
+    ports:
+      - "5010:5432"
+    volumes:
+      - cdm-bet-database:/var/lib/postgresql/data
+    networks:
+      - cdm-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_user"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -106,10 +123,25 @@ services:
     networks:
       - cdm-network
 
+  bet-service:
+    build: ./modules/bet
+    container_name: cdm-bet-service
+    env_file:
+      - .env.docker.bet
+    ports:
+      - "4010:4010"
+    depends_on:
+      bet-database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - cdm-network
+
 volumes:
   cdm-user-database:
   cdm-wallet-db:
-
+  cdm-bet-database:
 
 networks:
   cdm-network:

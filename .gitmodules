@@ -12,3 +12,6 @@
 [submodule "modules/wallet"]
 	path = modules/wallet
 	url = git@github.com:CDM-MNS/CDM-Wallet.git
+[submodule "modules/bet"]
+	path = modules/bet
+	url = git@github.com:CDM-MNS/CDM-Bet.git
